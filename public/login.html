@@ -1,0 +1,44 @@
+<!--index.html-->
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>First Page</title>
+<!--CSS-->
+<link rel="stylesheet" href="/jquery-ui/themes/base/jquery-ui.css">
+
+<!--Javascript-->
+<script src="/jquery/jquery.min.js"></script>
+<script src="/jquery-ui/jquery-ui.min.js"></script>
+</head>
+<body>
+        <div class="container">
+            <input type="text" id="txtEmail" name="txtEmail" placeholder="Email" />
+            <br/>
+            <input type="password" id="txtPassword" name="txtPassword" placeholder="รหัสผ่าน" />
+            <br/>
+            <input type="button" id="btnlogin" value="Submit"/>
+        </div>
+      </form>
+    <script type="text/javascript">
+           //btnlogin
+           $('#btnlogin').click( function(){
+              //console.log("logged in");
+              $.ajax({
+                method: "POST",
+                url: "https://tools.ecpe.nu.ac.th/network/api/login",
+                dataType : 'json',
+                headers: { 
+                  'Content-Type': 'application/json',
+                  "Accepts": "application/json",
+                },
+                data:JSON.stringify( { "email": $('#txtEmail').val(), "password": $('#txtPassword').val() } ),
+                success: function(data){
+                  console.log(data);
+                }
+              });
+            });
+    </script>
+</body>
+</html>

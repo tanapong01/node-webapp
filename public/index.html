@@ -4,13 +4,17 @@
 <html>
 <head>
 <meta charset="utf-8">
+<Content-Type text/html; charset=UTF-8></Content-Type>
 <title>First Page</title>
 <!--CSS-->
 <link rel="stylesheet" href="/jquery-ui/themes/base/jquery-ui.css">
-
+<!--Tailwind CSS-->
+<link rel="stylesheet" href="/styles/style.css"/>
 <!--Javascript-->
 <script src="/jquery/jquery.min.js"></script>
 <script src="/jquery-ui/jquery-ui.min.js"></script>
+
+
 </head>
 <body>
     <div id="tabs">
@@ -37,7 +41,17 @@
             <div id="myDynamicTable"></div>
           </div>
         <div id="tabs-3">
-        
+          <div class="flex justify-center">
+            <div class="flex flex-col md:flex-row md:max-w-xl rounded-lg bg-white shadow-lg">
+              <img class=" w-full h-96 md:h-auto object-cover md:w-48 rounded-t-lg md:rounded-none md:rounded-l-lg" src="/images/profile.png" alt="" />
+              <div class="p-6 flex flex-col justify-start">
+                <h5 class="text-gray-900 text-xl font-medium mb-2" id="name-info"></h5>
+                <p class="text-gray-700 text-base mb-4" id="student-id-info"></p>
+                <p class="text-gray-700 text-base mb-4" id="gpa-info"></p>
+                <p class="text-gray-700 text-base mb-4" id="stdposition"></p>
+              </div>
+            </div>
+          </div>
         </div>
     </div><!-- tabs-->
     <script type="text/javascript">
@@ -68,7 +82,7 @@
                headers: { 
                  'Content-Type': 'application/json',
                  "Accepts": "application/json",
-                 "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC90b29scy5lY3BlLm51LmFjLnRoXC9uZXR3b3JrXC9hcGlcL2xvZ2luIiwiaWF0IjoxNjU5Mjc4MzgwLCJleHAiOjE2NTkyODE5ODAsIm5iZiI6MTY1OTI3ODM4MCwianRpIjoiVmFVTG5uV0toZXRWd2d5NyIsInN1YiI6MTMwLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.WvExTMB9GELGD8AMMs31mAOk4sddXEYpjTC5OeFUDGc",
+                 "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC90b29scy5lY3BlLm51LmFjLnRoXC9uZXR3b3JrXC9hcGlcL2xvZ2luIiwiaWF0IjoxNjYxNzg3ODM0LCJleHAiOjE2NjE3OTE0MzQsIm5iZiI6MTY2MTc4NzgzNCwianRpIjoiODNOcDU0QXd5V2RyNXgyMSIsInN1YiI6MTMwLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ibIqAluGm2D-HlNPxOrTObqY7Hz7bXMf9e3-3Aen7nE",
                },
                success: function(data){
                  console.log(data);
@@ -226,7 +240,7 @@
               //elementButtonSave.setAttribute("class","tealA400");
               
              
-              elementButtonSave.setAttribute("onclick","popupConfirm('"+items[i].fullname+"',this)");
+              elementButtonSave.setAttribute("onclick","studentInfo('"+items[i].student_id+"',this)");
               
       
               cell5.appendChild(elementButtonSave);
@@ -240,9 +254,27 @@
           myTableDiv.appendChild(table);
         }
       
-        function popupConfirm(fullname,objElement){
-          alert(fullname);
-        }
+        function studentInfo(student_id){
+             $.ajax({
+               method: "GET",
+               url: "https://tools.ecpe.nu.ac.th/network/api/student/"+student_id,
+               dataType : 'json',
+               headers: { 
+                 'Content-Type': 'application/json',
+                 "Accepts": "application/json",
+                 "Authorization": `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC90b29scy5lY3BlLm51LmFjLnRoXC9uZXR3b3JrXC9hcGlcL2xvZ2luIiwiaWF0IjoxNjYxNTA1MzU0LCJleHAiOjE2NjE1MDg5NTQsIm5iZiI6MTY2MTUwNTM1NCwianRpIjoibzNIYmhYR0sybjl4b2xmUCIsInN1YiI6NjMsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.3-prcOotZH-13o4RmHQ6R2juhQD89M-3GXjh9hX3YuI`,
+               },
+               success: function(data){
+                 console.log(data);
+                 document.getElementById("name-info").innerHTML = "Name : "+data[0].fullname;
+                 document.getElementById("student-id-info").innerHTML = "Student ID : "+data[0].student_id;
+                 document.getElementById("gpa-info").innerHTML = "GPA : "+data[0].gpa;
+                 document.getElementById("stdposition").innerHTML = "Position : "+data[0].position;
+                 $("#tabs").tabs("option","active",2)
+               }
+             });
+            }
+        
       </script>
 </body>
 </html>
